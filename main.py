@@ -12,6 +12,7 @@ class Snake():
         self.lenth = len(self.body)
         self.dir = pygame.K_RIGHT
         self.bodySize = 9
+        self.fitness = 0
 
     def newPosition(self,key):
         self.dir = key
@@ -62,6 +63,9 @@ class Snake():
 
         return key
 
+    def updateFitness(self, time):
+        self.fitness = len(self.body)**3 + time
+
 class Food():
     def __init__(self):
         self.cord = [0,0]
@@ -98,7 +102,7 @@ class SnakeView():
                  headCord = [headCord[0] + diraction[0], headCord[1] + diraction[1]]
                  dist += 1
             self.view.append(lenToInfo)
-        print(self.view)
+
 
 
 
@@ -106,6 +110,8 @@ def display():
     theSnake = Snake()
     screen_width=400
     screen_height=400
+    timeDelay = 100
+    time = 0
     apple = Food()
     view = SnakeView()
     apple.update(screen_width, screen_height, theSnake.body)
@@ -118,8 +124,8 @@ def display():
     print(key)
     while run:
         displayMode.fill((0,0,0))
-        pygame.time.delay(100)
-
+        pygame.time.delay(timeDelay)
+        time += timeDelay/1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -138,6 +144,10 @@ def display():
         theSnake.newPosition(key)
         if theSnake.checkValid(screen_width, screen_height) == False:
             run = False
+
+        theSnake.updateFitness(time)
+        print(theSnake.fitness)
+
 
         view.update(theSnake.head, theSnake.body, apple.cord, screen_width, screen_height)
 
