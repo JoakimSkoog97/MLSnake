@@ -72,11 +72,42 @@ class Food():
             self.update(screen_width, screen_height, body)
 
 
+class SnakeView():
+    def __init__(self):
+        self.view = [] #[[len to self, len to wall, len to food], [[len to self, len to wall, len to food]]]
+
+    def update(self, snakeHead, snakeBody, appleCord, screen_width, screen_height):
+        self.view = []
+        dirToLook = [[10, 0], [10, 10], [0, 10], [-10, 10], [-10, 0], [-10, -10], [0, -10], [10, -10]]
+        for diraction in dirToLook:
+            headCord = snakeHead
+            dist = 0
+            lenToInfo = [None, None, None]
+            while headCord[0] >= 0 and headCord[0] <= screen_width and headCord[1] >= 0 and headCord[1] <= screen_height:
+                 if headCord == appleCord:
+                     lenToInfo[2] = dist
+
+                 if headCord[0] == screen_width or headCord[1] == screen_height or headCord[0] == 0 or headCord[1] == 0:
+                     if lenToInfo[1] == None:
+                        lenToInfo[1] = dist
+
+                 for bodyPart in snakeBody:
+                     if bodyPart == headCord and lenToInfo[0] == None and dist != 0:
+                         lenToInfo[0] = dist
+
+                 headCord = [headCord[0] + diraction[0], headCord[1] + diraction[1]]
+                 dist += 1
+            self.view.append(lenToInfo)
+        print(self.view)
+
+
+
 def display():
     theSnake = Snake()
     screen_width=400
     screen_height=400
     apple = Food()
+    view = SnakeView()
     apple.update(screen_width, screen_height, theSnake.body)
     pygame.init()
 
@@ -107,6 +138,8 @@ def display():
         theSnake.newPosition(key)
         if theSnake.checkValid(screen_width, screen_height) == False:
             run = False
+
+        view.update(theSnake.head, theSnake.body, apple.cord, screen_width, screen_height)
 
         pygame.display.update()
 
