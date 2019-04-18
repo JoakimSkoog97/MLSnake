@@ -116,15 +116,16 @@ def display():
     view = SnakeView()
     apple.update(screen_width, screen_height, theSnake.body)
     pygame.init()
-
     pygame.display.set_caption("Snake")
     displayMode = pygame.display.set_mode((screen_width,screen_height))
     run = True
     key = pygame.K_RIGHT
     print(key)
+    clock = pygame.time.Clock()
+    displayMode.fill((0,0,0))
     while run:
+        #pygame.time.delay(timeDelay)
         displayMode.fill((0,0,0))
-        pygame.time.delay(timeDelay)
         time += timeDelay/1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -136,9 +137,10 @@ def display():
 
 
         for bodyPart in theSnake.body:
-            pygame.draw.rect(displayMode, (255,255,255), (bodyPart[0], bodyPart[1], theSnake.bodySize, theSnake.bodySize))
-
-        pygame.draw.rect(displayMode, (255,0,0), (apple.cord[0], apple.cord[1], theSnake.bodySize, theSnake.bodySize))
+            snakeblit = pygame.draw.rect(displayMode, (255,255,255), (bodyPart[0], bodyPart[1], theSnake.bodySize, theSnake.bodySize))
+            pygame.display.update(snakeblit)
+        appleblit = pygame.draw.rect(displayMode, (255,0,0), (apple.cord[0], apple.cord[1], theSnake.bodySize, theSnake.bodySize))
+        pygame.display.update(appleblit)
         if theSnake.haveEaten(apple.cord):
             apple.update(screen_width, screen_height, theSnake.body)
         theSnake.newPosition(key)
@@ -146,12 +148,12 @@ def display():
             run = False
 
         theSnake.updateFitness(time)
-        print(theSnake.fitness)
-
+        #print(theSnake.fitness)
+        print(clock)
 
         view.update(theSnake.head, theSnake.body, apple.cord, screen_width, screen_height)
-
-        pygame.display.update()
+        #pygame.display.update()
+        clock.tick(30)
 
 
 
