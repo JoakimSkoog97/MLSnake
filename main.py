@@ -152,7 +152,7 @@ def display():
         print(clock)
 
         view.update(theSnake.head, theSnake.body, apple.cord, screen_width, screen_height)
-        #pygame.display.update()
+        #pygame.display.update() #THE SNAKE DOESEN'T UPDATE ITS POSISION WITH OUT THIS 
         clock.tick(30)
 
 
